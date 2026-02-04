@@ -8,6 +8,7 @@ interface DrawerProps {
   currentPage: string;
   points: number;
   userName: string;
+  userAvatar?: string | null;
 }
 
 const menuItems = [
@@ -24,7 +25,8 @@ export const Drawer = ({
   onNavigate,
   currentPage,
   points,
-  userName
+  userName,
+  userAvatar
 }: DrawerProps) => {
   return (
     <AnimatePresence>
@@ -62,11 +64,15 @@ export const Drawer = ({
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: 0.1 }}
-                className="w-16 h-16 rounded-full bg-background/20 backdrop-blur flex items-center justify-center mb-4 border-2 border-white/30"
+                className="w-16 h-16 rounded-full bg-background/20 backdrop-blur flex items-center justify-center mb-4 border-2 border-white/30 overflow-hidden"
               >
-                <span className="text-2xl font-bold text-white">
-                  {userName.charAt(0).toUpperCase()}
-                </span>
+                {userAvatar ? (
+                  <img src={userAvatar} alt={userName} className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-2xl font-bold text-white">
+                    {userName.charAt(0).toUpperCase()}
+                  </span>
+                )}
               </motion.div>
               
               <motion.h3

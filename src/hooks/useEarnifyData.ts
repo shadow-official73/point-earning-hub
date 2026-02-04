@@ -5,6 +5,7 @@ interface EarnifyData {
   secondsDone: number;
   lastDate: string;
   userName: string;
+  userAvatar: string | null;
 }
 
 const STORAGE_KEY = 'earnify_data';
@@ -27,7 +28,8 @@ const getInitialData = (): EarnifyData => {
     points: 0,
     secondsDone: 0,
     lastDate: today,
-    userName: 'User'
+    userName: 'User',
+    userAvatar: null
   };
 };
 
@@ -86,16 +88,27 @@ export const useEarnifyData = () => {
     return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
+  const updateUserName = useCallback((name: string) => {
+    setData(prev => ({ ...prev, userName: name }));
+  }, []);
+
+  const updateUserAvatar = useCallback((avatar: string | null) => {
+    setData(prev => ({ ...prev, userAvatar: avatar }));
+  }, []);
+
   return {
     points: data.points,
     secondsDone: data.secondsDone,
     userName: data.userName,
+    userAvatar: data.userAvatar,
     isMining,
     progress,
     timeDisplay: formatTime(data.secondsDone),
     goalTime: formatTime(GOAL_SECONDS),
     toggleMining,
     spendPoints,
+    updateUserName,
+    updateUserAvatar,
     goalReached: data.secondsDone >= GOAL_SECONDS
   };
 };
