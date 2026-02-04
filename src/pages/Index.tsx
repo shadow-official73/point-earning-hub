@@ -4,6 +4,7 @@ import { TopNav } from '@/components/TopNav';
 import { Drawer } from '@/components/Drawer';
 import { Dashboard } from '@/pages/Dashboard';
 import { Recharge } from '@/pages/Recharge';
+import { Profile } from '@/pages/Profile';
 import { ComingSoon } from '@/pages/ComingSoon';
 import { useEarnifyData } from '@/hooks/useEarnifyData';
 import { useToast } from '@/hooks/use-toast';
@@ -23,6 +24,9 @@ const Index = () => {
     toggleMining,
     spendPoints,
     userName,
+    userAvatar,
+    updateUserName,
+    updateUserAvatar,
     goalReached
   } = useEarnifyData();
 
@@ -64,6 +68,17 @@ const Index = () => {
             onNavigate={setCurrentPage}
           />
         );
+      case 'profile':
+        return (
+          <Profile
+            userName={userName}
+            userAvatar={userAvatar}
+            points={points}
+            onUpdateName={updateUserName}
+            onUpdateAvatar={updateUserAvatar}
+            onBack={() => setCurrentPage('dashboard')}
+          />
+        );
       default:
         return (
           <ComingSoon
@@ -88,6 +103,7 @@ const Index = () => {
         currentPage={currentPage}
         points={points}
         userName={userName}
+        userAvatar={userAvatar}
       />
       
       <AnimatePresence mode="wait">
