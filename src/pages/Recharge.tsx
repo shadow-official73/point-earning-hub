@@ -14,7 +14,7 @@ import {
 
 interface RechargeProps {
   points: number;
-  onSpendPoints: (amount: number) => boolean;
+  onSpendPoints: (amount: number, description?: string) => boolean;
   onNavigate: (page: 'dashboard' | 'recharge' | 'profile' | 'earnings' | 'settings') => void;
 }
 
@@ -46,7 +46,7 @@ export const Recharge = ({ points, onSpendPoints, onNavigate }: RechargeProps) =
       return;
     }
 
-    const success = onSpendPoints(RECHARGE_COST);
+    const success = onSpendPoints(RECHARGE_COST, `Mobile recharge - ${operator}`);
     if (success) {
       setStatus('success');
       setTimeout(() => {

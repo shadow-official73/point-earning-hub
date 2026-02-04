@@ -1,11 +1,23 @@
 import { useState, useEffect, useCallback } from 'react';
 
+export interface EarningHistoryItem {
+  date: string;
+  pointsEarned: number;
+  secondsMined: number;
+  type: 'earned' | 'spent';
+  description: string;
+}
+
 interface EarnifyData {
   points: number;
   secondsDone: number;
   lastDate: string;
   userName: string;
   userAvatar: string | null;
+  totalPointsEarned: number;
+  totalPointsSpent: number;
+  daysActive: number;
+  earningHistory: EarningHistoryItem[];
 }
 
 const STORAGE_KEY = 'earnify_data';
@@ -19,9 +31,16 @@ const getInitialData = (): EarnifyData => {
     const data = JSON.parse(stored) as EarnifyData;
     // Reset daily progress if it's a new day
     if (data.lastDate !== today) {
-      return { ...data, secondsDone: 0, lastDate: today };
+      const newDaysActive = (data.daysActive || 1) + 1;
+      return { ...data, secondsDone: 0, lastDate: today, daysActive: newDaysActive };
     }
-    return data;
+    return {
+      ...data,
+      totalPointsEarned: data.totalPointsEarned || data.points,
+      totalPointsSpent: data.totalPointsSpent || 0,
+      daysActive: data.daysActive || 1,
+      earningHistory: data.earningHistory || []
+    };
   }
   
   return {
@@ -29,7 +48,11 @@ const getInitialData = (): EarnifyData => {
     secondsDone: 0,
     lastDate: today,
     userName: 'User',
-    userAvatar: null
+    userAvatar: null,
+    totalPointsEarned: 0,
+    totalPointsSpent: 0,
+    daysActive: 1,
+    earningHistory: []
   };
 };
 
@@ -51,10 +74,19 @@ export const useEarnifyData = () => {
         if (prev.secondsDone >= GOAL_SECONDS - 1) {
           // Goal reached - award point and reset
           setIsMining(false);
+          const newHistoryItem: EarningHistoryItem = {
+            date: new Date().toISOString(),
+            pointsEarned: 1,
+            secondsMined: GOAL_SECONDS,
+            type: 'earned',
+            description: 'Daily mining goal completed'
+          };
           return {
             ...prev,
             points: prev.points + 1,
-            secondsDone: 0
+            totalPointsEarned: prev.totalPointsEarned + 1,
+            secondsDone: 0,
+            earningHistory: [newHistoryItem, ...prev.earningHistory].slice(0, 50)
           };
         }
         return {
@@ -71,9 +103,21 @@ export const useEarnifyData = () => {
     setIsMining(prev => !prev);
   }, []);
 
-  const spendPoints = useCallback((amount: number): boolean => {
+  const spendPoints = useCallback((amount: number, description: string = 'Points spent'): boolean => {
     if (data.points >= amount) {
-      setData(prev => ({ ...prev, points: prev.points - amount }));
+      const newHistoryItem: EarningHistoryItem = {
+        date: new Date().toISOString(),
+        pointsEarned: amount,
+        secondsMined: 0,
+        type: 'spent',
+        description
+      };
+      setData(prev => ({ 
+        ...prev, 
+        points: prev.points - amount,
+        totalPointsSpent: prev.totalPointsSpent + amount,
+        earningHistory: [newHistoryItem, ...prev.earningHistory].slice(0, 50)
+      }));
       return true;
     }
     return false;
@@ -101,6 +145,10 @@ export const useEarnifyData = () => {
     secondsDone: data.secondsDone,
     userName: data.userName,
     userAvatar: data.userAvatar,
+    totalPointsEarned: data.totalPointsEarned,
+    totalPointsSpent: data.totalPointsSpent,
+    daysActive: data.daysActive,
+    earningHistory: data.earningHistory,
     isMining,
     progress,
     timeDisplay: formatTime(data.secondsDone),

@@ -5,6 +5,7 @@ import { Drawer } from '@/components/Drawer';
 import { Dashboard } from '@/pages/Dashboard';
 import { Recharge } from '@/pages/Recharge';
 import { Profile } from '@/pages/Profile';
+import { Earnings } from '@/pages/Earnings';
 import { ComingSoon } from '@/pages/ComingSoon';
 import { useEarnifyData } from '@/hooks/useEarnifyData';
 import { useToast } from '@/hooks/use-toast';
@@ -27,6 +28,10 @@ const Index = () => {
     userAvatar,
     updateUserName,
     updateUserAvatar,
+    totalPointsEarned,
+    totalPointsSpent,
+    daysActive,
+    earningHistory,
     goalReached
   } = useEarnifyData();
 
@@ -76,6 +81,17 @@ const Index = () => {
             points={points}
             onUpdateName={updateUserName}
             onUpdateAvatar={updateUserAvatar}
+            onBack={() => setCurrentPage('dashboard')}
+          />
+        );
+      case 'earnings':
+        return (
+          <Earnings
+            points={points}
+            totalPointsEarned={totalPointsEarned}
+            totalPointsSpent={totalPointsSpent}
+            daysActive={daysActive}
+            earningHistory={earningHistory}
             onBack={() => setCurrentPage('dashboard')}
           />
         );
