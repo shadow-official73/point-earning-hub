@@ -6,7 +6,7 @@ import { Dashboard } from '@/pages/Dashboard';
 import { Recharge } from '@/pages/Recharge';
 import { Profile } from '@/pages/Profile';
 import { Earnings } from '@/pages/Earnings';
-import { ComingSoon } from '@/pages/ComingSoon';
+import { Settings } from '@/pages/Settings';
 import { useEarnifyData } from '@/hooks/useEarnifyData';
 import { useToast } from '@/hooks/use-toast';
 
@@ -95,13 +95,18 @@ const Index = () => {
             onBack={() => setCurrentPage('dashboard')}
           />
         );
-      default:
+    case 'settings':
         return (
-          <ComingSoon
-            title={pageTitles[currentPage]}
-            onBack={() => setCurrentPage('dashboard')}
+        <Settings
+          onBack={() => setCurrentPage('dashboard')}
+          onLogout={() => {
+            setCurrentPage('dashboard');
+            window.location.reload();
+          }}
           />
         );
+    default:
+      return null;
     }
   };
 
