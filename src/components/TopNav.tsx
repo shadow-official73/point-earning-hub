@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, Search, X, Zap } from 'lucide-react';
+import { Menu, Search, X } from 'lucide-react';
+import rLogo from '@/assets/r-logo.png';
 
 interface TopNavProps {
   onMenuClick: () => void;
@@ -11,7 +12,7 @@ export const TopNav = ({ onMenuClick, points }: TopNavProps) => {
   const [searchOpen, setSearchOpen] = useState(false);
 
   return (
-    <header className="gradient-primary h-16 flex items-center justify-between px-4 shadow-lg relative z-30">
+    <header className="bg-black h-16 flex items-center justify-between px-4 shadow-lg relative z-30">
       <div className="flex items-center gap-3">
         <motion.button
           whileTap={{ scale: 0.95 }}
@@ -29,9 +30,9 @@ export const TopNav = ({ onMenuClick, points }: TopNavProps) => {
               exit={{ opacity: 0, x: -10 }}
               className="flex items-center gap-2"
             >
-              <Zap className="text-yellow-300" size={22} />
+              <img src={rLogo} alt="RAJVIR WALA" className="w-8 h-8" />
               <h1 className="text-white font-bold text-xl tracking-tight">
-                Earnify
+                RAJVIR WALA
               </h1>
             </motion.div>
           )}
@@ -68,8 +69,7 @@ export const TopNav = ({ onMenuClick, points }: TopNavProps) => {
             className="flex items-center gap-3"
           >
             <div className="hidden sm:flex items-center gap-1 bg-white/10 px-3 py-1.5 rounded-full">
-              <Zap size={14} className="text-yellow-300" />
-              <span className="text-white text-sm font-semibold">{points}</span>
+              <span className="text-brand-cyan text-sm font-semibold">{points} Points</span>
             </div>
             
             <motion.button
