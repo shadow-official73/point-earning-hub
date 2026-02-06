@@ -1,44 +1,62 @@
- import { useState, useEffect } from 'react';
- import { motion } from 'framer-motion';
- import { ArrowLeft, Moon, Sun, Bell, BellOff, LogOut, Trash2, Info } from 'lucide-react';
- import { Button } from '@/components/ui/button';
- import { Switch } from '@/components/ui/switch';
- import { Card, CardContent } from '@/components/ui/card';
- import {
-   AlertDialog,
-   AlertDialogAction,
-   AlertDialogCancel,
-   AlertDialogContent,
-   AlertDialogDescription,
-   AlertDialogFooter,
-   AlertDialogHeader,
-   AlertDialogTitle,
-   AlertDialogTrigger,
- } from '@/components/ui/alert-dialog';
- import { useToast } from '@/hooks/use-toast';
- 
- interface SettingsProps {
-   onBack: () => void;
-   onLogout: () => void;
- }
- 
- const SETTINGS_KEY = 'earnify_settings';
- 
- interface AppSettings {
-   darkMode: boolean;
-   notifications: boolean;
- }
- 
- const getInitialSettings = (): AppSettings => {
-   const stored = localStorage.getItem(SETTINGS_KEY);
-   if (stored) {
-     return JSON.parse(stored);
-   }
-   return {
-     darkMode: window.matchMedia('(prefers-color-scheme: dark)').matches,
-     notifications: true,
-   };
- };
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { ArrowLeft, Moon, Sun, Bell, BellOff, LogOut, Trash2, Info, Globe } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+import { Card, CardContent } from '@/components/ui/card';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { useToast } from '@/hooks/use-toast';
+import rLogo from '@/assets/r-logo.png';
+
+interface SettingsProps {
+  onBack: () => void;
+  onLogout: () => void;
+}
+
+const SETTINGS_KEY = 'rajvirwala_settings';
+
+const LANGUAGES = [
+  { code: 'en', name: 'English' },
+  { code: 'hi', name: 'हिन्दी (Hindi)' },
+  { code: 'pa', name: 'ਪੰਜਾਬੀ (Punjabi)' },
+  { code: 'es', name: 'Español (Spanish)' },
+  { code: 'fr', name: 'Français (French)' },
+];
+
+interface AppSettings {
+  darkMode: boolean;
+  notifications: boolean;
+  language: string;
+}
+
+const getInitialSettings = (): AppSettings => {
+  const stored = localStorage.getItem(SETTINGS_KEY);
+  if (stored) {
+    return JSON.parse(stored);
+  }
+  return {
+    darkMode: window.matchMedia('(prefers-color-scheme: dark)').matches,
+    notifications: true,
+    language: 'en',
+  };
+};
  
  export const Settings = ({ onBack, onLogout }: SettingsProps) => {
    const [settings, setSettings] = useState<AppSettings>(getInitialSettings);
@@ -71,15 +89,24 @@
      });
    };
  
-   const handleLogout = () => {
-     localStorage.removeItem('earnify_data');
-     localStorage.removeItem(SETTINGS_KEY);
-     onLogout();
-     toast({
-       title: '👋 Logged Out',
-       description: 'All data has been cleared',
-     });
-   };
+  const handleLogout = () => {
+    localStorage.removeItem('rajvirwala_data');
+    localStorage.removeItem(SETTINGS_KEY);
+    onLogout();
+    toast({
+      title: '👋 Logged Out',
+      description: 'All data has been cleared',
+    });
+  };
+
+  const handleLanguageChange = (value: string) => {
+    setSettings(prev => ({ ...prev, language: value }));
+    const langName = LANGUAGES.find(l => l.code === value)?.name || value;
+    toast({
+      title: '🌐 Language Changed',
+      description: `Language set to ${langName}`,
+    });
+  };
  
    const settingsItems = [
      {
@@ -106,23 +133,23 @@
      },
    ];
  
-   return (
-     <div className="flex-1 flex flex-col">
-       {/* Header */}
-       <div className="gradient-primary p-6 pb-8">
-         <div className="flex items-center gap-4 mb-4">
-           <button
-             onClick={onBack}
-             className="text-white/80 hover:text-white transition-colors"
-           >
-             <ArrowLeft size={24} />
-           </button>
-           <h1 className="text-xl font-bold text-white">Settings</h1>
-         </div>
-         <p className="text-white/80 text-sm">
-           Customize your app experience
-         </p>
-       </div>
+  return (
+    <div className="flex-1 flex flex-col">
+      {/* Header */}
+      <div className="bg-black p-6 pb-8">
+        <div className="flex items-center gap-4 mb-4">
+          <button
+            onClick={onBack}
+            className="text-white/80 hover:text-white transition-colors"
+          >
+            <ArrowLeft size={24} />
+          </button>
+          <h1 className="text-xl font-bold text-white">Settings</h1>
+        </div>
+        <p className="text-white/80 text-sm">
+          Customize your app experience
+        </p>
+      </div>
  
        {/* Content */}
        <div className="flex-1 p-4 -mt-4 space-y-4">
@@ -157,20 +184,49 @@
            </CardContent>
          </Card>
  
-         {/* About Section */}
-         <Card className="rounded-2xl border-0 shadow-lg">
-           <CardContent className="p-4">
-             <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
-                <Info size={20} className="text-secondary-foreground" />
-               </div>
-               <div>
-                 <h3 className="font-medium text-foreground">About Earnify Pro</h3>
-                 <p className="text-sm text-muted-foreground">Version 1.0.0</p>
-               </div>
-             </div>
-           </CardContent>
-         </Card>
+          {/* Language Setting */}
+          <Card className="rounded-2xl border-0 shadow-lg">
+            <CardContent className="p-0">
+              <div className="flex items-center justify-between p-4">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Globe size={20} className="text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-foreground">Language</h3>
+                    <p className="text-sm text-muted-foreground">Choose your preferred language</p>
+                  </div>
+                </div>
+                <Select value={settings.language} onValueChange={handleLanguageChange}>
+                  <SelectTrigger className="w-[140px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {LANGUAGES.map(lang => (
+                      <SelectItem key={lang.code} value={lang.code}>
+                        {lang.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* About Section */}
+          <Card className="rounded-2xl border-0 shadow-lg">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-full overflow-hidden bg-black flex items-center justify-center">
+                  <img src={rLogo} alt="RAJVIR WALA" className="w-8 h-8" />
+                </div>
+                <div>
+                  <h3 className="font-medium text-foreground">About RAJVIR WALA</h3>
+                  <p className="text-sm text-muted-foreground">Version 1.0.0</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
  
          {/* Danger Zone */}
          <Card className="rounded-2xl border-0 shadow-lg border-destructive/20">

@@ -20,7 +20,7 @@ interface EarnifyData {
   earningHistory: EarningHistoryItem[];
 }
 
-const STORAGE_KEY = 'earnify_data';
+const STORAGE_KEY = 'rajvirwala_data';
 const GOAL_SECONDS = 18000; // 5 hours = 18,000 seconds
 
 const getInitialData = (): EarnifyData => {

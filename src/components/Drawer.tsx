@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, Smartphone, User, BarChart3, Settings, X, Zap } from 'lucide-react';
+import { Home, Smartphone, User, BarChart3, Settings, X } from 'lucide-react';
+import rLogo from '@/assets/r-logo.png';
 
 interface DrawerProps {
   isOpen: boolean;
@@ -51,7 +52,7 @@ export const Drawer = ({
             className="fixed left-0 top-0 h-full w-[78%] max-w-[320px] bg-card z-50 shadow-2xl flex flex-col"
           >
             {/* Header */}
-            <div className="gradient-primary p-6 pb-8">
+            <div className="bg-black p-6 pb-8">
               <button
                 onClick={onClose}
                 className="absolute top-4 right-4 text-white/80 hover:text-white transition-colors"
@@ -88,9 +89,9 @@ export const Drawer = ({
                 initial={{ y: 10, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.2 }}
-                className="flex items-center gap-2 text-white/90 mt-1"
+                className="flex items-center gap-2 text-brand-cyan mt-1"
               >
-                <Zap size={16} className="text-yellow-300" />
+                <img src={rLogo} alt="R" className="w-4 h-4" />
                 <span className="font-medium">{points} Points</span>
               </motion.div>
             </div>
@@ -127,7 +128,7 @@ export const Drawer = ({
             {/* Footer */}
             <div className="p-6 border-t border-border">
               <p className="text-xs text-muted-foreground text-center">
-                Earnify Pro v1.0
+                RAJVIR WALA v1.0
               </p>
             </div>
           </motion.div>
