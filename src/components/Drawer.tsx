@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Home, Smartphone, User, BarChart3, Settings, X } from 'lucide-react';
+import rajvirLogo from '@/assets/rajvir-logo.png';
 import rLogo from '@/assets/r-logo.png';
 
 interface DrawerProps {
@@ -126,10 +127,8 @@ export const Drawer = ({
             </nav>
             
             {/* Footer */}
-            <div className="p-6 border-t border-border">
-              <p className="text-xs text-muted-foreground text-center">
-                RAJVIR WALA v1.0
-              </p>
+            <div className="p-6 border-t border-border flex justify-center">
+              <img src={rajvirLogo} alt="RAJVIR WALA" className="h-6 opacity-60" />
             </div>
           </motion.div>
         </>
