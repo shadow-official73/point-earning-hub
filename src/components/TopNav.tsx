@@ -30,7 +30,7 @@ export const TopNav = ({ onMenuClick, points }: TopNavProps) => {
               exit={{ opacity: 0, x: -10 }}
               className="flex items-center gap-2"
             >
-              <img src={rajvirLogo} alt="RAJVIR WALA" className="h-12" />
+              <img src={rajvirLogo} alt="RAJVIR WALA" className="h-[4.25rem]" />
             </motion.div>
           )}
         </AnimatePresence>
