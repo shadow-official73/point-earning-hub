@@ -29,7 +29,7 @@ export const TopNav = ({ onMenuClick, points }: TopNavProps) => {
               exit={{ opacity: 0, x: -10 }}
               className="flex items-center gap-2"
             >
-              <span className="text-xl font-bold tracking-wide" style={{ color: '#7BDFFF' }}>RAJVIR WALA</span>
+              <span className="text-xl font-bold tracking-wide" style={{ color: '#7BDFFF', textShadow: '0 0 10px #7BDFFF, 0 0 20px #7BDFFF80, 0 0 40px #7BDFFF40' }}>RAJVIR WALA</span>
             </motion.div>
           )}
         </AnimatePresence>
