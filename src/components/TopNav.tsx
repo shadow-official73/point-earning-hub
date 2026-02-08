@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, Search, X } from 'lucide-react';
-import rajvirLogo from '@/assets/rajvir-logo.png';
 
 interface TopNavProps {
   onMenuClick: () => void;
@@ -30,7 +29,7 @@ export const TopNav = ({ onMenuClick, points }: TopNavProps) => {
               exit={{ opacity: 0, x: -10 }}
               className="flex items-center gap-2"
             >
-              <img src={rajvirLogo} alt="RAJVIR WALA" className="h-[6.25rem]" />
+              <span className="text-xl font-bold tracking-wide" style={{ color: '#7BDFFF' }}>RAJVIR WALA</span>
             </motion.div>
           )}
         </AnimatePresence>
